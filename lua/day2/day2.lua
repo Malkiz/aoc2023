@@ -15,26 +15,22 @@ if not fileContent then
   os.exit()
 end
 
-local max = { red = 12, green = 13, blue = 14 }
 local sum = 0
 
 for line in fileContent:gmatch("[^\r\n]+") do
   local gameNumber = line:match("Game (%d+):")
-  local isValid = true
+  local max = { red = 0, green = 0, blue = 0 }
   for round in line:gmatch("[^;]+") do
     for number, color in round:gmatch("(%d+) (%a+)") do
       if tonumber(number) > max[color] then
         -- print("Game " .. gameNumber .. " is invalid")
-        isValid = false
-        break
+        max[color] = tonumber(number)
       end
     end
   end
 
-  if isValid then
-    -- print("Game " .. gameNumber .. " is valid")
-    sum = sum + tonumber(gameNumber)
-  end
+  local power = max.red * max.green * max.blue
+  sum = sum + power
 end
 
 print("Sum: " .. sum)
